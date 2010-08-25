@@ -12,7 +12,10 @@ mapCountryData <- function(
                            mapTitle = 'columnName', #this sets it to the name of the column, any other string can be passed too
                            oceanCol=NA,
                            aspect=1,
-                           missingCountryCol=NA                                                    
+                           missingCountryCol=NA,
+                           add=FALSE,
+                           nameColumnToHatch = ""
+                           #hatchVar=NULL                                                 
                            ){
                            
   functionName <- as.character(sys.call()[[1]])
@@ -95,14 +98,43 @@ mapCountryData <- function(
     #setting all missing values to the last element
     dataCatNums[is.na(dataCatNums)]<-length(colourVector)
   }
-  
-  #setting up the map plot
-  rwmNewMapPlot(mapToPlot,mapRegion=mapRegion,xlim=xlim,ylim=ylim,oceanCol=oceanCol,aspect=aspect)
-  #plotting the map
-  plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol,add=TRUE)
-  
-  #the above might need : xaxs="i",yaxs="i") #xaxs="i" ensures maps fill plot area
-   
+
+  #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  #need to check this
+  #Scale hatching variable (and invert). Then threshold above a certain value to secure solid status
+  hatchVar = NULL
+  if (nameColumnToHatch=='')
+     {
+      #setting up the map plot
+      if (!add) rwmNewMapPlot(mapToPlot,mapRegion=mapRegion,xlim=xlim,ylim=ylim,oceanCol=oceanCol,aspect=aspect)
+      #plotting the map
+      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol,add=TRUE)#,density=c(20:200))#angle=c(1:360),)
+     } else  
+    {
+    #*HATCHING OPTION*
+    #setting up the map plot    
+     
+      hatchVar = mapToPlot@data[[nameColumnToHatch]]
+      
+      hatchVar = (hatchVar - min(hatchVar, na.rm=TRUE))/max(hatchVar, na.rm=TRUE)
+      hatchVar = 1-hatchVar
+      hatchVar = (hatchVar*50) + 30
+      hatchVar[hatchVar > 79] = -1
+      #hatchVar = (hatchVar*70) + 40
+      #hatchVar = (hatchVar*70) + (hatchVar^2)/1000
+
+      #setting up the map plot
+      if(!add)  rwmNewMapPlot(mapToPlot,mapRegion=mapRegion,xlim=xlim,ylim=ylim,oceanCol=oceanCol,aspect=aspect)
+      #plotting the map
+      #plot(mapToPlot,col=colourVector[mapToPlot@data$dataCatNums],border=borderCol,add=TRUE, density=hatchVar, angle=135, lty=1)
+      #plot(mapToPlot,col=colourVector[mapToPlot@data$dataCatNums],border=borderCol,add=TRUE, density=hatchVar, angle=45, lty=1)
+      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol, density=hatchVar, angle=135, lty=1,add=TRUE)
+      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol, density=hatchVar, angle=45, lty=1,add=TRUE)
+                 
+     }  #end of hatching option
+
+
+
   if (addLegend){
       
       if((length(catMethod)==1 && catMethod=="categorical") || !require("spam") || !require("fields")){

@@ -12,12 +12,20 @@ Enables mapping of country level and gridded user datasets by facilitating joini
 \tabular{ll}{
 Package: \tab rworldmap\cr
 Type: \tab Package\cr
-Version: \tab 1.05\cr
-Date: \tab 2009-12-15\cr
+Version: \tab 0.110\cr
+Date: \tab 2010-08-30\cr
 License: \tab GPL (>= 2)\cr
 }
-Country Level Data can be joined to a map using  \code{\link{joinCountryData2Map}}, then mapped using \code{\link{mapCountryData}}.
+Country Level Data can be joined to a map using  \code{\link{joinCountryData2Map}}, 
+then mapped using \code{\link{mapCountryData}}.
 Gridded data can be mapped using \code{\link{mapGriddedData}}.
+
+More generic functions allow the user to provide their own polygon map 
+using \code{\link{joinData2Map}} and \code{\link{mapPolys}}.
+
+Bubble, bar and pie charts can be added to maps using \code{\link{mapBubbles}}, \code{\link{mapBars}} and \code{\link{mapPies}}. 
+
+Options are provided for categorising data, colouring maps and symbols, and adding legends.
 
 Type vignette('rworldmap') to access a short document showing a few examples of 
 the main rworldmap functions to get you started.
@@ -26,12 +34,17 @@ the main rworldmap functions to get you started.
 \author{
 Andy South
 
-with contributions from Barry Rowlingson, Roger Bivand, Matthew Staines and Pru Foster 
+with contributions from Joe Scutt-Phillips, Barry Rowlingson, Roger Bivand and Pru Foster 
 
-Maintainer: <andy.south [at] cefas.co.uk>
+Maintainer: <southandy@gmail.com>
 }
 \references{
+Stable version :
+http://cran.r-project.org/web/packages/rworldmap
+\cr 
+Development version :
 http://code.google.com/p/rworld
+
 }
 
 \keyword{ package }

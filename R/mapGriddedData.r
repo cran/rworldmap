@@ -1,3 +1,6 @@
+#7/5/2010 bug fixes for if catMethod of a vector of breaks is passed
+#!BEWARE that this may have broken other options
+#24/5/2010 fixing & tidying catMethod
 mapGriddedData <- function(
                            dataset = ""
                          , nameColumnToPlot = "" # only for multi-attribute spatialGridDataframes
@@ -25,7 +28,7 @@ mapGriddedData <- function(
     require(maptools)
     require(sp)
     
-    ## filename ##
+    ## filename or nothing ##
     if (class(dataset)=='character')
        {
         if (dataset=="") #if no dataset passed
@@ -35,8 +38,8 @@ mapGriddedData <- function(
             sGDF <- get("gridExData")
            } else
             sGDF <- readAsciiGrid(dataset)
-       } else if (class(dataset)=='matrix' || class(dataset)=='array')
-    ## matrix or array ##   
+    ## matrix or array ##        
+       } else if (class(dataset)=='matrix' || class(dataset)=='array')   
        {
         if ( length(dim(dataset)) == 2 )
            {
@@ -53,14 +56,13 @@ mapGriddedData <- function(
            {
             stop("the first argument to ",functionName," if a matrix or array should have 2 dimensions, yours has, ", length(dim(dataset))) 
             return(FALSE)
-           } 
-            
-        
+           }           
+    ## SGDF passed ##           
        } else if (class(dataset)=='SpatialGridDataFrame')
-    ## SGDF ##   
        {   
         sGDF <- dataset
        } else
+    ## !! I could add option here for dataFrame with nameX & nameY columns   
        {
         stop("the first argument to ",functionName," should be a file name, 2D array or matrix, or SpatialGridDataFrame, yours is, ", class(dataset)) 
         return(FALSE)
@@ -80,39 +82,63 @@ mapGriddedData <- function(
          message("plotting the first data column because nameColumnToPlot not specified in mapGridAscii()\n")
      }
 
-    #CLASSIFYING THE DATA 
-    #checking whether method is categorical, length(catMethod)==1 needed to avoid warning if a vector of breaks is passed 
-    #if categorical, just copy the data, add an as.factor() to convert any data that aren't yet as a factor
-    #if( length(catMethod)==1 && catMethod=="categorical" )    
-    #    sGDF$indexToPlotAsFactor <- as.factor( sGDF[[attrName]] )
-    #else 
-    #    sGDF$indexToPlotAsFactor <- rwmApplyClassBreaks( sGDF[[attrName]], catMethod=catMethod, numCats=numCats )
-
+    #CLASSIFYING THE DATA
+    
+    #first get the raw data    
 
     dataCategorised <- sGDF[[attrName]]
     
-    #checking whether method is categorical, length(catMethod)==1 needed to avoid warning if a vector of breaks is passed  
-    if( length(catMethod)==1 && catMethod=="categorical" ) #if categorical, just copy the data, add an as.factor() to convert any data that aren't yet as a factor   
-      { 
+    print(dataCategorised[1:10])  
+    
+    #cat : checking whether method is categorical, 
+    #length(catMethod)==1 needed to avoid warning if a vector of breaks is passed  
+    if( length(catMethod)==1 && catMethod=="categorical" )    
+      {
+       #if categorical, just copy the data, add an as.factor() to convert any data that aren't yet as a factor 
        dataCategorised <- as.factor( dataCategorised )
        cutVector <- levels(dataCategorised) #doesn't do cutting but is passed for use in legend
+  		 #6/5/10 bug fix
+       numColours <- -1 + length(levels(dataCategorised))
       }else
-      { 
-        if(is.character(catMethod)==TRUE)
+      #all other catMethods except categorical 
+      {
+       #if catMethod is not a vector of numbers 
+       if(is.character(catMethod)==TRUE)
       	{	
       		cutVector <- rwmGetClassBreaks( dataCategorised, catMethod=catMethod, numCats=numCats, verbose=TRUE )
-      	} else if(is.numeric(catMethod)==TRUE)
+      		#6/5/10 bug fix
+      		#28/7/10 removed to avoid bug with default params
+          #numColours <- -1 + length(levels(dataCategorised))
+          numColours <- -1 + length(cutVector)
+        } else if(is.numeric(catMethod)==TRUE)
       	#if catMethod is numeric it is already a vector of breaks	
       	{
       		cutVector <- catMethod
+      		#6/5/10 bug fix
+      		numColours <- -1 + length(cutVector)
       	}
     	#Categorising the data, using a vector of breaks.	
-    	dataCategorised <- cut( dataCategorised, cutVector, include.lowest=TRUE)    	
+    	#dataCategorised <- cut( dataCategorised, cutVector, include.lowest=TRUE) #BUG ? 28/4/10 
+      
+      dataCategorised <- cut( dataCategorised, cutVector, include.lowest=TRUE,labels=FALSE)
+      
+      #cut : labels for the levels of the resulting category.  By default,
+      #    labels are constructed using ‘"(a,b]"’ interval notation.
+      #    If ‘labels = FALSE’, simple integer codes are returned instead of a factor.
+        	
   	  } #end of if data are not categorical
   
     #because the numColours may be modified slightly from numCats
-    numColours <- length(levels(dataCategorised))
-    sGDF$indexToPlot <- as.numeric( dataCategorised )
+    #numColours <- -1 + length(levels(dataCategorised))
+    #numColours <- -1 + length(unique(dataCategorised))
+        
+    #browser()
+    
+    #sGDF$indexToPlot <- as.numeric( dataCategorised ) #BUG ? 28/4/10
+    #sGDF$indexToPlot <- as.factor( dataCategorised ) #BUG correction? 28/4/10
+    #sGDF$indexToPlot <- dataCategorised  #BUG correction? 28/4/10
+    sGDF$indexToPlot <- as.numeric( as.character( dataCategorised )) #BUG ? 28/4/10
+    
     colourVector <- rwmGetColours(colourPalette,numColours)
 
     #setting up the map plot 
@@ -127,7 +153,9 @@ mapGriddedData <- function(
        
     #only plot ascii data if plotData=T (allows legend to be plotted on its own by setting plotData=F)
     if (plotData)
-        image(sGDF,add=TRUE,attr='indexToPlot',col=colourVector, xaxs='i', yaxs='i' ) #xaxs=i ensures maps fill plot area
+        #image(sGDF,add=TRUE,attr='indexToPlot',col=colourVector, xaxs='i', yaxs='i' ) #xaxs=i ensures maps fill plot area
+        #7/5/10 !BUG without a breaks param then image fits colours to just those cats present
+        image(sGDF,add=TRUE,attr='indexToPlot',col=colourVector, xaxs='i', yaxs='i',breaks=c(0:(length(cutVector)-1) )) #xaxs=i ensures maps fill plot area
 
 
     borderOptions = c('low','coarse','coasts',NA,'','none')
