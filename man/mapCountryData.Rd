@@ -5,13 +5,21 @@
   Draw a map of country-level data, allowing countries to be coloured, from an object created in joinCountryData2Map().
 }
 \usage{
-mapCountryData(mapToPlot = "", nameColumnToPlot = "", numCats = 7,
-               xlim=c(-160,160), ylim=c(-80,90),
-               mapRegion = "world",
-               catMethod="quantiles", colourPalette= "heat", addLegend=TRUE,
-               borderCol = 'grey', mapTitle = 'columnName',
-               oceanCol=NA, aspect=1, missingCountryCol=NA
-               )   
+mapCountryData(mapToPlot = "", nameColumnToPlot = ""
+              , numCats = 7
+              , xlim=c(-160,160), ylim=c(-80,90)
+              , mapRegion = "world"
+              , catMethod="quantiles"
+              , colourPalette= "heat"
+              , addLegend=TRUE
+              , borderCol = 'grey'
+              , mapTitle = 'columnName'
+              , oceanCol=NA
+              , aspect=1
+              , missingCountryCol=NA
+              , add=FALSE
+              , nameColumnToHatch=""
+              )   
 }
 \arguments{
   \item{mapToPlot}{ a spatial polygons dataframe from joinCountryData2Map() containing country polygons and data, if none specified an internal example data is used }
@@ -33,6 +41,12 @@ mapCountryData(mapToPlot = "", nameColumnToPlot = "", numCats = 7,
   \item{oceanCol}{a colour for the ocean}
   \item{aspect}{aspect for the map, defaults to 1, if set to 'variable' uses same method as plot.Spatial in sp }
   \item{missingCountryCol}{a colour for missing countries}
+  \item{add}{whether to add this map on top of an existing map, TRUE/FALSE}
+  \item{nameColumnToHatch}{allows hatching of country fills (e.g. to represent uncertainty)
+                          , specify a column containing numeric data
+                          , highest values will be solid and lower values will
+                          have a decreasing density of hatching
+                          , new feature more documentation will be added soon}    
   
 }
 

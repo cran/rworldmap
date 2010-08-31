@@ -20,7 +20,7 @@ Science (Cefas), Lowestoft, NR33 OHT, UK. {\tt andy.south at cefas.co.uk; southa
 referenced by country codes or gridded at half degree resolution.}\newline
 \vspace{1 cm}
 
-%including quest & cefas logos
+%including quest and cefas logos
 Funded by : 
 %\scaledbox{.5}{\includegraphics{questLogo}}
 \vspace{1 cm}
