@@ -187,11 +187,12 @@ mapGriddedData <- function(
        plot( getMap(resolution='coarse'), add=TRUE, border=borderCol )
        } else
     if (addBorders=='coasts'){
-       #uses maps library
-       library(maps) 
-       #map( map(interior=FALSE,add=TRUE, col=borderCol ) )
-       #21/1/10 to correct bug
-       map(interior=FALSE,add=TRUE, col=borderCol ) 
+       #30/9/2012 replacing use of maps library
+       #library(maps) 
+       #map(interior=FALSE,add=TRUE, col=borderCol )
+       coastsCoarse <- NULL #to avoid build warning
+       data(coastsCoarse)
+       plot(coastsCoarse, add=TRUE, col=borderCol) 
        } else 
     if ( ! addBorders %in% borderOptions){
        warning("unrecognised addBorders = ",addBorders, "none plotted, choose one of",paste(borderOptions,""))

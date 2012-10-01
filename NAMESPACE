@@ -10,6 +10,5 @@ import(
   maptools,
   foreign,
   fields,
-  spam,
-  maps
+  spam
 )

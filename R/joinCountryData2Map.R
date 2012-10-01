@@ -4,22 +4,42 @@ function( dF
         , nameJoinColumn = "ISO3V10"
         , nameCountryColumn = "Country"
         , suggestForFailedCodes = FALSE 
-        , projection="none"  #options "none", "EqualArea"
-        , mapResolution="low" #options low, medium, only for projection='none' initially
+        , mapResolution="coarse" 
+        , projection=NA 
         , verbose = FALSE #if set to FALSE it doesn't print progress messages to console                         
         )
    {
 
-    mapWithData <- getMap(projection=projection,resolution=mapResolution)
+    mapWithData <- getMap(resolution=mapResolution)
+
+		if ( ! is.na(projection))
+		   warning('the projection argument has been deprecated, returning Lat Lon, use spTransform from package rgdal as shown in help details or the FAQ')
     
     #test whether user joinCode is one of permitted
-    listJoinCodes <- c("ISO2","ISO3","FIPS","NAME","UN") 
+    
+    #23/5/12 allow some extras
+    #natural earth data has : "ISO_A2","ISO_A3","FIPS_10_","ADMIN","ISO_N3",  #*beware that "NAME" in nat earth has abbreviations that don't match  
+    #i think i should leave them stored as is
+    #as joinCode is the name of the column in the maps in rworldmap
+    #I could either copy the columns
+    #or just change joinCode here 
+    #try just changing to start
+    
+    listJoinCodesNew <- c("ISO_A2","ISO_A3","FIPS_10_","ADMIN","ISO_N3" )
+    listJoinCodesOld <- c("ISO2","ISO3","FIPS","NAME","UN" )
+    listJoinCodes <- c(listJoinCodesOld,listJoinCodesNew)
     if (joinCode %in% listJoinCodes == FALSE)
        {
         stop("your joinCode (",joinCode,") in joinCountryData2Map() is not one of those supported. Options are :",paste(listJoinCodes,""),"\n")
         return(FALSE)
        }
-       
+    
+    #converting any join codes from old to new
+    joinCodeOld <- joinCode
+    if (joinCode %in% listJoinCodesOld)
+       {joinCode <- listJoinCodesNew[match(joinCode,listJoinCodesOld)]}
+      
+    
     ## check that the join column exists in the user data
     if ( is.na(match(nameJoinColumn, names(dF)) )){
       stop("your chosen nameJoinColumn :'",nameJoinColumn,"' seems not to exist in your data, columns = ", paste(names(dF),""))
@@ -32,13 +52,39 @@ function( dF
     #using match rather than merge, faster and enables greater reporting of success & failure
     
     #match returns a vector of the positions of (first) matches of its first argument in its second. 
-    #so perhaps I would also want to check that codes aren't repeated
+    #so perhaps I would also want to check that codes aren't repeated no can't do everything for people
     #!also want to find a way of coping with Namibia, the code NA gets interpreted as no data
            
     #copy the users nameJoinColumn to a new column named the same as the column in the map for the join code
     #e.g if user has ISO3166_3 it will be copied to ISO3
-    dF[[joinCode]] <- dF[[nameJoinColumn]]
+    #dF[[joinCode]] <- dF[[nameJoinColumn]]
+    #22/5/12 changed to make changing to synonyms easier
+    dF[[joinCode]] <- as.character(dF[[nameJoinColumn]])
     
+    #this removes any trailing spaces from the user data which could be a problem
+    dF[[joinCode]] <- gsub("[[:space:]]*$","",dF[[joinCode]])
+    
+    #[:space:] is a pre-defined character class that matches space characters in your locale. 
+    #* says to repeat the match zero or more times and $ says to match the end of the string.
+    
+    #23/5/12
+    #if using NAME I could convert to ISO3 first using synonyms and match based on that
+    #and set nameCountryColumn to what the join column was
+    #but does everything become a bit hidden then ?
+    #not really keeps it fairly simple
+    if (joinCode=='ADMIN' ) #now it is ADMIN because I converted above from NAME to ADMIN
+        { 
+         #get the equivalent ISO 3 codes for the column
+         #create new column
+         dF$ISO3 <- NA
+         for(i in 1:nrow(dF)) dF$ISO3[i] = rwmGetISO3( dF[[joinCode]][i] )
+         #set join code to ISO3
+         joinCode='ISO3';
+         #set name for the country column to what user had as the name join column 
+         nameCountryColumn=nameJoinColumn; 
+         #and set the nameJoinColumn to ISO3 which we've added to the user data
+         #nameJoinColumn='ISO3'
+         }
     
     matchPosnsInLookup <- match(as.character(dF[[joinCode]])
                               , as.character(mapWithData@data[[joinCode]]))
@@ -67,20 +113,28 @@ function( dF
  #[1,] "CIV"       "Ivory Coast"                   
  #[2,] "COD"       "Congo, Democratic Republic"    
                        
-    #!could create an optional loop here to go through the failed codes 
-    #& prompt the user for a choice fro a suggested list 
-    if ( suggestForFailedCodes )
-       {
-        for( i in 1 : numFailedCodes)
-           {
-            #search for similar codes/countried & ask user to choose one
-            
-           }
-       }
+    #put something here to try to match failed countries or codes 
+    #initially just for if country name used as the join 
+    #if ( suggestForFailedCodes )
+    #if ( suggestForFailedCodes && joinCode=="NAME")
+    #   {
+    #    for( i in 1 : numFailedCodes)
+    #       {
+    #        correctCountry <- getCountryName(failedCodes[i])
+    #        if (!is.na(correctCountry))
+    #           {
+    #            #dF[[joinCode]][is.na(matchPosnsInLookup)]
+    #            dF[[joinCode]][which(dF[[joinCode]]==failedCodes[i])] <- correctCountry
+    #           }          
+    #       }
+    #   }
+    
     #can also get at countries in the lookup that don't appear in user data, by reversing match arguments
     matchPosnsInUserData <- match(as.character(mapWithData@data[[joinCode]])
                                 , as.character(dF[[joinCode]])) 
-                                
+    
+    #23/5/12 decided no very useful printing this out
+    
     #these are the codes in lookup that aren't found in user data
     codesMissingFromUserData <- as.character( mapWithData@data[[joinCode]][is.na(matchPosnsInUserData)] )                            
     countriesMissingFromUserData <- as.character( mapWithData@data[["NAME"]][is.na(matchPosnsInUserData)] )
@@ -89,13 +143,13 @@ function( dF
     
     #printing info to console
     cat(numMissingCodes,"codes from the map weren't represented in your data\n")
-    if (verbose) #if (verbose) print more messages to console
-       {
-        if (nameJoinColumn!="NAME")                             
-        {   print(cbind(codesMissingFromUserData,countriesMissingFromUserData))
-        }else #if joined on NAME don't want to print names twice 
-            print(codesMissingFromUserData)
-       } # 
+    #if (verbose) #if (verbose) print more messages to console
+    #   {
+    #    if (nameJoinColumn!="NAME")                             
+    #    {   print(cbind(codesMissingFromUserData,countriesMissingFromUserData))
+    #    }else #if joined on NAME don't want to print names twice 
+    #        print(codesMissingFromUserData)
+    #   } # 
 
 
     ###############################################################
@@ -114,4 +168,16 @@ function( dF
     invisible(mapWithData)
    
    } #end of joinCountryData2Map()
+
+#testing these should give perefct matches
+#sPDF <- joinCountryData2Map(tlow,joinCode='NAME',nameJoinColumn='ADMIN',verbose=T,mapResolution="low")
+#sPDF <- joinCountryData2Map(tlow,joinCode='NAME',nameJoinColumn='ADMIN',verbose=T,mapResolution="coarse")
+#data(countryExData)
+#sPDF <- joinCountryData2Map(countryExData,joinCode='NAME',nameJoinColumn='Country',verbose=T,mapResolution="low")
+
+#[12,] "United States"                    "United States"                   
+#[13,] "Viet Nam"                         "Viet Nam"                        
+#106 codes from the map weren't represented in your data
+#> rwmGetISO3("Viet Nam")
+#[1] "VNM"
 

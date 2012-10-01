@@ -2,8 +2,8 @@
 function(mapToPlot=getMap(),
          oceanCol=NA,
          mapRegion="world",
-         xlim=c(-160,160),                  
-         ylim=c(-80,90),
+         xlim=NA,                  
+         ylim=NA,
          aspect=1){
 
   #browser()
@@ -14,16 +14,11 @@ function(mapToPlot=getMap(),
     xlim <- c(dFwesn$we, dFwesn$ea)
     ylim <- c(dFwesn$so, dFwesn$no)
   }
+
+  #2/10/12 getting xlim & ylim from bbox of the map
+  if (length(xlim)<2) xlim <- bbox(mapToPlot)['x',]  
+  if (length(ylim)<2) ylim <- bbox(mapToPlot)['y',]
   
-  #for setting region when projection is different
-  #Mollweide map goes to max 17840888 
-  #using estimated coord conversion rather than proper projection through spTransform   
-  #can instead just query the bbox of the mapToPlot object
-  if ( mapToPlot@bbox[3] > 100000 ) { 
-  #if (projection=="EqualArea" || projection=="equalArea"){  
-    xlim=xlim*100000
-    ylim=ylim*100000
-  }
   
   plot.new()
 
