@@ -23,9 +23,13 @@ Science (Cefas), Lowestoft, NR33 OHT, UK. {\tt southandy at gmail.com}}}
 \fi
 
 
-
-
 \SweaveOpts{echo=TRUE,print=FALSE, width=7, height=3.7, eps=FALSE} %default width and height for figures
+
+%trying these SweaveOpts from raster to make vignette smaller - works
+\SweaveOpts{png=TRUE}
+\SweaveOpts{resolution=200}
+\SweaveOpts{keep.source=TRUE}
+
 \usepackage{Sweave}
 \usepackage{a4wide}
 %\usepackage{a4}
@@ -79,14 +83,6 @@ in size, data categorisation, and colour schemes.
 options(width=70)
 @
 
-%9/2/2011
-%to try stop R producing Rplots.pdf
-<<echo=FALSE>>=
-require(grDevices)
-options(device = function(...) {     
-.Call("R_GD_nullDevice", PACKAGE = "grDevices") 
-}) 
-@
 
 %this code used in setting up all figures later
 <<plotSetup,echo=FALSE>>=
@@ -105,7 +101,6 @@ data("countryExData",envir=environment())
 sPDF <- joinCountryData2Map(countryExData,
               joinCode = "ISO3",
               nameJoinColumn = "ISO3V10",
-              projection = "none",
               mapResolution = "coarse"
               )
 #map the data with no legend
@@ -366,8 +361,7 @@ getMap()\$NAME or one of "eurasia","africa","latin america","uk","oceania","asia
 #joining the data to a map
 sPDF <- joinCountryData2Map(countryExData,
               joinCode = "ISO3",
-              nameJoinColumn = "ISO3V10",
-              projection = "none",
+              nameJoinColumn = "ISO3V10"
               )            
 #creating a user defined colour palette
 op <- palette(c('green','yellow','orange','red')) 
@@ -450,8 +444,8 @@ will be printed on the map.
 <<plotSetup>>
 
 mapBubbles( dF=getMap()
-          , nameZSize="POP2005"
-          , nameZColour="REGION"
+          , nameZSize="POP_EST"
+          , nameZColour="GEO3major"
           , colourPalette='rainbow'
           , oceanCol='lightblue'
           , landCol='wheat'

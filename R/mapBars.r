@@ -41,7 +41,8 @@
     #perhaps need to replace any na's with zeroes
     #as they will be plotted the same in pies & have a problem in seq with them ?
     #replace all nas in a df
-    dF[is.na(dF)] <- 0
+    #31/5/12 removing
+    #dF[is.na(dF)] <- 0
     
     #20/7/2010 changed option for region to be set from data
     if ( mapRegion == 'data' ) #( (we==0 && so==0) ) # || (we==NA && so==NA)) #caused error with some data not other
@@ -197,7 +198,7 @@
 #testing the function
     
 #dF <- getMap()@data    
-#mapBars( dF,nameX="LON", nameY="LAT",nameZs=c('POP2005','AREA') )
+#mapBars( dF,nameX="LON", nameY="LAT",nameZs=c('POP_EST','AREA') )
 #mapBars( dF,nameX="LON", nameY="LAT",nameZs=c('AREA','AREA') )
 #mapBars( dF,nameX="LON", nameY="LAT",nameZs=c('AREA','AREA'),mapRegion='africa' )
 #mapBars( dF,nameX="LON", nameY="LAT",nameZs=c('AREA','AREA','AREA','AREA'),mapRegion='africa' )

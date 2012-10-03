@@ -2,8 +2,8 @@ mapCountryData <- function(
                 mapToPlot =         ""
               , nameColumnToPlot =  ""
               , numCats =           7
-              , xlim =              c(-180,180)
-              , ylim =              c(-80,90)
+              , xlim =              NA
+              , ylim =              NA
               , mapRegion =         "world"
               , catMethod =         "quantiles"
               , colourPalette =     "heat"
@@ -21,11 +21,12 @@ mapCountryData <- function(
                            
   #browser()  #n to enter the step through debugger, Q to exit
   
-  require(sp)
+  #29/9/2012 to avoid a polypath error, needs sp version >= 0.9-101 
+  #added usePolypath=FALSE in plot calls because safer and should work now
+  #set_Polypath(FALSE)
   
-  ## checking the data
-  ## aug09 requires a SpatialPolygonsDataFrame
-  ## or uses the example data in the maps POP2005 (i.e. doesn't need to join to countryExData)
+  require(sp)
+
  
  if ( class(mapToPlot)=="SpatialPolygonsDataFrame" ) {
     ## checking if there is any data in the dataFrame
@@ -35,11 +36,10 @@ mapCountryData <- function(
     } 
   } else if ( mapToPlot == "" ) {
     message(paste("using example data because no file specified in",functionName))
-    mapToPlot <- getMap(resolution="low",projection="none")
-    #data("countryExData",envir=environment(),package="rworldmap")
-    #dF <- get("countryExData") # copying from the example data
+    mapToPlot <- getMap(resolution="coarse")
+
     ## also setting a defsult nameColumnToPlot if it isn't set
-    if ( nameColumnToPlot == "" ) nameColumnToPlot <- "POP2005" #
+    if ( nameColumnToPlot == "" ) nameColumnToPlot <- "POP_EST" #
   } else {
     #warning(inFile," seems not to be a valid file name or data frame, exiting ",functionName,"\n")
     stop(functionName," requires a SpatialPolygonsDataFrame object created by the joinCountryData2Map() function \n")
@@ -53,8 +53,14 @@ mapCountryData <- function(
   } 
   
   ##classify data into categories   
-
   dataCategorised <- mapToPlot@data[[nameColumnToPlot]]
+
+  #30/5/12 if the data are not numerical then set catMethod to categorical
+  if ( ! is.numeric(dataCategorised) && catMethod != "categorical" )
+     {
+     catMethod = "categorical"
+     message(paste("using catMethod='categorical' for non numeric data in",functionName))
+     }
   
   #checking whether method is categorical, length(catMethod)==1 needed to avoid warning if a vector of breaks is passed  
   if( length(catMethod)==1 && catMethod=="categorical" ) #if categorical, just copy the data, add an as.factor() to convert any data that aren't yet as a factor   
@@ -107,8 +113,9 @@ mapCountryData <- function(
       #setting up the map plot
       if (!add) rwmNewMapPlot(mapToPlot,mapRegion=mapRegion,xlim=xlim,ylim=ylim,oceanCol=oceanCol,aspect=aspect)
       #plotting the map
-      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol,add=TRUE)#,density=c(20:200))#angle=c(1:360),)
-     } else  
+      #plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol,add=TRUE)#,density=c(20:200))#angle=c(1:360),)
+      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol,add=TRUE,usePolypath=FALSE)#29/9/2012
+      } else  
     {
     #*HATCHING OPTION*
     #setting up the map plot    
@@ -127,8 +134,8 @@ mapCountryData <- function(
       #plotting the map
       #plot(mapToPlot,col=colourVector[mapToPlot@data$dataCatNums],border=borderCol,add=TRUE, density=hatchVar, angle=135, lty=1)
       #plot(mapToPlot,col=colourVector[mapToPlot@data$dataCatNums],border=borderCol,add=TRUE, density=hatchVar, angle=45, lty=1)
-      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol, density=hatchVar, angle=135, lty=1,add=TRUE)
-      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol, density=hatchVar, angle=45, lty=1,add=TRUE)
+      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol, density=hatchVar, angle=135, lty=1,add=TRUE,usePolypath=FALSE)#29/9/2012
+      plot(mapToPlot,col=colourVector[dataCatNums],border=borderCol, density=hatchVar, angle=45, lty=1,add=TRUE,usePolypath=FALSE)#29/9/2012
                  
      }  #end of hatching option
 
