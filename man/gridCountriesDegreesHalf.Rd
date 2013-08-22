@@ -1,11 +1,11 @@
-\name{gridCountriesNumeric}
-\alias{gridCountriesNumeric}
+\name{gridCountriesDegreesHalf}
+\alias{gridCountriesDegreesHalf}
 \docType{data}
 \title{ A gloabl half degree grid specifying the country at each cell }
 \description{
 A grid covering the globe at half degree resolution, specifying the country (UN numeric code) at each cell.
 }
-\usage{data(gridCountriesNumeric)}
+\usage{data(gridCountriesDegreesHalf)}
 \format{
   The format is:
 \preformatted{
@@ -34,12 +34,10 @@ Uses a simple grid map defining a single country identity for each half degree c
 (sp, SpatialGridDataFrame), used by the function aggregateHalfDegreeGridToCountries()
 }
 \source{
-IIASA
+created from getMap(resolution='low')
 }
-\references{
-http://www.iiasa.ac.at/Research/GGI/DB/
-}
+
 \examples{
-data(gridCountriesNumeric)
+data(gridCountriesDegreesHalf)
 }
 \keyword{datasets}

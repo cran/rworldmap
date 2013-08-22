@@ -15,12 +15,13 @@ function( inFile=""
                           , mapRegion = "world"   #sets map extents, overrides we,ea etc.
                           , catMethod="quantiles"   #any vector defining breaks, "fixedWidth","quantiles"
                           , colourPalette= "heat" #"heat","white2Black","palette" for current palette
-                          , addLegend=TRUE 
+                          , addLegend=TRUE
+                          , lwd=0.5
                          )
    { 
    
     #can fail without this
-    require(sp)
+    #require(sp)
                        
     #map global half degree gridded data 
     #will work on a gridascii file or a SpatialGridDataFrame or use the example data if none specified
@@ -75,7 +76,8 @@ function( inFile=""
                           , ylim=ylim
                           , catMethod=catMethod   #any vector defining breaks, "fixedWidth","quantiles"
                           , colourPalette = colourPalette
-                          , addLegend=addLegend   
+                          , addLegend=addLegend 
+                          , lwd=lwd        
                           )      
 
     #returning mapParams so they can be used by addMapLegend()

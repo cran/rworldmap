@@ -14,6 +14,7 @@ mapBars(dF = ""
   
         , barWidth = 1
         , barOrient = 'vert' 
+        , barRelative = TRUE
   
         , ratio = 1
         , addCatLegend = TRUE
@@ -22,14 +23,16 @@ mapBars(dF = ""
         , symbolSize = 1 
         , maxZVal=NA
 
-        , xlim=c(-160,160)
-        , ylim=c(-80,90)                        
+        , xlim=NA
+        , ylim=NA                        
         , mapRegion = "world"                                                      
         , borderCol = "grey"
         , oceanCol=NA
         , landCol=NA
         , add=FALSE                        
         , main=''
+        , lwd=0.5
+        , lwdSymbols=1
         ,... )          
           
 }
@@ -42,6 +45,7 @@ mapBars(dF = ""
   
   \item{barWidth}{multiple for the width of bar symbols, relative to barOrient see below}
   \item{barOrient}{orientation of bars, options 'horiz' and 'vert'} 
+  \item{barRelative}{default is TRUE, each variable (column) is scaled to it's maximum value} 
   
   \item{ratio}{ the ratio of Y to N in the output map, set to 1 as default} 
   \item{addCatLegend}{whether to add a legend for categories}
@@ -62,6 +66,9 @@ mapBars(dF = ""
   \item{add}{whether to add the symbols to an existing map, TRUE/FALSE}
   
   \item{main}{title for the map}
+  \item{lwd}{line width for country borders}  
+  \item{lwdSymbols}{line width for symbols} 
+	  
   \item{\dots}{any extra arguments to points()}
 }
 \details{
@@ -76,7 +83,8 @@ currently doesn't return anything
 \examples{
 
 #getting example data
-dF <- getMap()@data  
+#dF <- getMap()@data  
+sPDF <- getMap()
   
 ## these examples repeat the same column in 'nameZs' to show that equal sized bars are created 
 
@@ -90,11 +98,16 @@ dF <- getMap()@data
 #mapBars( dF,nameX="LON", nameY="LAT"
 #       , nameZs=c('POP_EST','POP_EST','POP_EST','POP_EST'),mapRegion='africa',symbolSize=2 )
 
-mapBars( dF, nameX="LON", nameY="LAT"
-       , nameZs=c('POP_EST','POP_EST','POP_EST','POP_EST')
+mapBars( sPDF, 
+       , nameZs=c('POP_EST','GDP_MD_EST')
        , mapRegion='africa'
-       , symbolSize=2
-       , barOrient = 'horiz' )
+       , symbolSize=4 )
+
+# this does work too
+#mapBars( dF,nameX="LON", nameY="LAT" 
+#       , nameZs=c('POP_EST','GDP_MD_EST')
+#       , mapRegion='africa'
+#       , symbolSize=4 )       
 
   
 
