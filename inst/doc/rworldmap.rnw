@@ -1,8 +1,7 @@
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*- 
 \documentclass[a4paper]{article}
 \title{rworldmap vignette}
-\author{Andy South\footnote{Centre for Environment, Fisheries and Aquaculture 
-Science (Cefas), Lowestoft, NR33 OHT, UK. {\tt southandy at gmail.com}}}
+\author{Andy South\footnote{Norwich, UK. {\tt southandy at gmail.com}}}
 
 %\VignetteIndexEntry{rworldmap vignette : examples to get started}
 
@@ -92,11 +91,14 @@ par(mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
 %Here are example output figures for country and gridded data :
 
 %for the first couple of figures don't show the code : echo=FALSE
+%7/11/12 TEMP test set results to TRUE  
+%<<eg1,fig=TRUE,echo=FALSE,results=hide>>=
 \begin{figure}[bthp]
   \begin{center}
   
-<<eg1,fig=TRUE,echo=FALSE,results=hide>>=
+<<eg1,fig=TRUE,echo=FALSE>>=
 <<plotSetup>>
+
 data("countryExData",envir=environment())
 sPDF <- joinCountryData2Map(countryExData,
               joinCode = "ISO3",
@@ -116,6 +118,18 @@ mapParams <- mapCountryData( sPDF,
 #            legendWidth=0.5,
 #            legendMar = 2
 #            ))
+
+#colourVector = mapParams[["colourVector"]]
+#cutVector = mapParams[["cutVector"]]
+#warning(paste("length colourVector=",length(mapParams$colourVector),"\n"
+#             ,"length cutVector=",length(mapParams$cutVector),"\n"
+#						 ,"length plottedData=",length(mapParams$plottedData),"\n"
+#						 ,"catMethod=",mapParams$catMethod,"\n"
+#						 ,"colourPalette=",mapParams$colourPalette,"\n"
+#						 ))						 
+#warning(paste("length colourVector=",length(colourVector),"length cutVector=",length(cutVector),"\n"))
+
+#6/11/12 problem here
 addMapLegend(colourVector = mapParams[["colourVector"]],
              cutVector = mapParams[["cutVector"]], 
              legendLabels="all",
@@ -324,7 +338,7 @@ The following arguments can be specified to alter the appearance of your plots.
 
 \begin{itemize} 
 \item {\tt catMethod} method for categorisation of data "pretty", "fixedWidth",
-"diverging","logfixedWidth","quantiles","categorical", or a numeric vector 
+"diverging","logFixedWidth","quantiles","categorical", or a numeric vector 
 defining breaks.
 
 \item {\tt numCats} number of categories to classify the data into, may be modified 
@@ -479,8 +493,8 @@ the same figure and shows a selection of different RColorBrewer palettes.
 <<classInt_RColorBrewer,fig=TRUE,echo=TRUE,results=hide>>=
 <<plotSetup>>
 
-library(classInt)
 library(RColorBrewer)
+library(classInt)
 
 #getting example data and joining to a map
 data("countryExData",envir=environment(),package="rworldmap")
@@ -522,12 +536,16 @@ do.call( addMapLegend
 
 #uses sPDF from the previous chunk
 
-op <- par(fin=c(7,9),mfcol=c(5,2),mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
+#10 frames July 2013 started getting unableto allocate bitmap error
+#op <- par(fin=c(7,9),mfcol=c(5,2),mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
+#reducing to 8 frames to try to avoid memory error
+op <- par(fin=c(7,9),mfcol=c(4,2),mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
 
 brewerList <- c("Greens","Greys","Oranges","OrRd"
                ,"PuBuGn","Purples","YlGn","YlGnBu","YlOrBr","YlOrRd")
 
-for(i in 1:10)
+#for(i in 1:10)
+for(i in 1:8)
    {
     #getting a colour scheme from the RColorBrewer package
     colourPalette <- brewer.pal(7,brewerList[i])

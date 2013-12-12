@@ -24,6 +24,8 @@ mapBubbles(dF = ""
           , catMethod = "categorical"
           , colourPalette = "heat"
           
+          , xlim =              NA
+          , ylim =              NA          
           , mapRegion = "world"
           , borderCol = "grey"
           , oceanCol = NA
@@ -40,6 +42,8 @@ mapBubbles(dF = ""
           , colourLegendTitle = nameZColour
           , add = FALSE
           , plotZeroVals = TRUE
+          , lwd = 0.5
+          , lwdSymbols = 1
           , ...)
 }
 \arguments{
@@ -59,14 +63,16 @@ mapBubbles(dF = ""
   \item{main}{title for the map, set to nameZSize by default}
   
   \item{numCats}{ number of categories to put the data in, may be modified if this number is incompatible with the catMethod chosen}
-  \item{catMethod}{ method for categorisation of data "pretty", "fixedWidth", "diverging", "logfixedWidth","quantiles","categorical", or a numeric vector defining breaks }
+  \item{catMethod}{ method for categorisation of data "pretty", "fixedWidth", "diverging", "logFixedWidth", "quantiles", "categorical", or a numeric vector defining breaks }
   \item{colourPalette}{ a string describing the colour palette to use, choice of :
     \enumerate{
                \item{}{="palette" for the current palette} 
                \item{}{a vector of valid colours, e.g. =c('red','white','blue') or output from RColourBrewer} 
-               \item{}{= one of "heat","diverging","white2Black","black2White","topo","rainbow","terrain","negpos8","negpos9" }
+               \item{}{= one of "heat", "diverging", "white2Black", "black2White", "topo", "rainbow", "terrain", "negpos8", "negpos9" }
                }}
-  
+
+  \item{xlim}{ map extents c(west,east), can be overidden by mapRegion }
+  \item{ylim}{ map extents c(south,north), can be overidden by mapRegion }  
   \item{mapRegion}{ a country name from getMap()\$NAME or 'world','africa','oceania','eurasia','uk' sets map extents, overrides xlim,ylim }
   \item{borderCol}{ the colour for country borders  }
   \item{oceanCol}{a colour for the ocean}
@@ -85,7 +91,8 @@ mapBubbles(dF = ""
   
   \item{add}{whether to add the symbols to an existing map, TRUE/FALSE}
   \item{plotZeroVals}{whether to plot zero values as a cross, TRUE/FALSE}
-  
+  \item{lwd}{line width for country borders}  
+  \item{lwdSymbols}{line width for symbols}  	  
   \item{\dots}{any extra arguments to points()}
 }
 \details{

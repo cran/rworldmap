@@ -19,7 +19,8 @@ barplotCountryData( dF
                    , toPDF = FALSE
                    , outFile = ""
                    , decreasing = TRUE
-                   , na.last = TRUE                   
+                   , na.last = TRUE
+                   , cex = 0.7
                    , ...
                )   
 }
@@ -31,18 +32,19 @@ barplotCountryData( dF
   \item{scaleSameInPanels}{whether to set the scale the same in each panel TRUE/FALSE, default=FALSE allowing more of the variability in the data to be viewed}
   \item{main}{title for the plot}
   \item{numCats}{ number of categories to put the data in, may be modified if this number is incompatible with the catMethod chosen}
-  \item{catMethod}{ method for categorisation of data "pretty", "fixedWidth", "diverging", "logfixedWidth","quantiles","categorical", or a numeric vector defining breaks }
+  \item{catMethod}{ method for categorisation of data "pretty", "fixedWidth", "diverging", "logFixedWidth","quantiles","categorical", or a numeric vector defining breaks }
   \item{colourPalette}{ a string describing the colour palette to use, choice of :
     \enumerate{
                \item{}{="palette" for the current palette} 
                \item{}{a vector of valid colours, e.g. =c('red','white','blue') or output from RColourBrewer} 
-               \item{}{= one of "heat","diverging","white2Black","black2White","topo","rainbow","terrain","negpos8","negpos9" }
+               \item{}{= one of "heat", "diverging", "white2Black", "black2White", "topo", "rainbow", "terrain", "negpos8", "negpos9" }
                }}
   \item{addLegend}{ NOT YET WORKING whether to add a legend or not, TRUE/FALSE }
   \item{toPDF}{ whether to output the plot to a pdf rather than the screen, TRUE/FALSE  }
   \item{outFile}{ output filename if toPDF=TRUE  }
   \item{decreasing}{ logical. Should the sort order be increasing or decreasing?  }
   \item{na.last}{ for controlling the treatment of NAs. If TRUE, missing values in the data are put last; if FALSE, they are put first; if NA, they are removed. }    
+  \item{cex}{sizing of labels, default = 0.7 } 
   \item{\dots}{ other arguments to pass to barplot }    
   
 }

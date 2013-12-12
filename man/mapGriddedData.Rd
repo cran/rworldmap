@@ -11,14 +11,15 @@ mapGriddedData(  dataset =          ""
                , colourPalette =    "heat"  
                , xlim =             c(-180,180)
                , ylim =             c(-80,90) 
-               , mapRegion =        "world"   
-               , addLegend =        TRUE
-               , addBorders =       'low' 
-               , borderCol =        'grey'
-               , oceanCol =         NA
-               , landCol =          NA
-               , plotData =         TRUE
-               , aspect =           1   
+               , mapRegion =  "world"   
+               , addLegend =  TRUE
+               , addBorders = 'coarse' 
+               , borderCol =  'grey'
+               , oceanCol =   NA
+               , landCol =    NA
+               , plotData =   TRUE
+               , aspect =     1
+               , lwd =        1
                )         
 }
 
@@ -31,12 +32,12 @@ mapGriddedData(  dataset =          ""
                }}
   \item{nameColumnToPlot}{ name of column containing the data to plot }
   \item{numCats}{ number of categories to put the data in, may be overidden if catMethod ='pretty' }
-  \item{catMethod}{ method for categorisation of data "pretty", "fixedWidth","diverging", "logfixedWidth","quantiles","categorical", or a numeric vector defining breaks } 
+  \item{catMethod}{ method for categorisation of data "pretty", "fixedWidth","diverging", "logFixedWidth","quantiles","categorical", or a numeric vector defining breaks } 
   \item{colourPalette}{ a string describing the colour palette to use, choice of :
     \enumerate{
                \item{}"palette" for the current palette 
                \item{}a vector of valid colours, e.g. =c('red','white','blue') or output from RColourBrewer 
-               \item{}one of "heat","diverging","white2Black","black2White","topo","rainbow","terrain","negpos8","negpos9"
+               \item{}one of "heat", "diverging", "white2Black", "black2White", "topo", "rainbow", "terrain", "negpos8", "negpos9"
                }}
   \item{xlim}{ map extents c(west,east), can be overidden by mapRegion }
   \item{ylim}{ map extents c(south,north), can be overidden by mapRegion } 
@@ -48,6 +49,7 @@ mapGriddedData(  dataset =          ""
   \item{landCol}{a colour to fill countries if the grid values are NA over land}
   \item{plotData}{ whether to plotData, if FALSE a legend can be added on its own  }
   \item{aspect}{aspect for the map, defaults to 1, if set to 'variable' uses same method as plot.Spatial in sp }
+  \item{lwd}{line width for country borders}  
   %\item{\dots}{ extra args }
 }
 

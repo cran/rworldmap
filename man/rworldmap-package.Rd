@@ -6,20 +6,21 @@
 For mapping global data.
 }
 \description{
-Enables mapping of country level and gridded user datasets by facilitating joining to world maps and visualisation options.  
+Enables mapping of country level and gridded user datasets by facilitating joining to modern world maps and offering visualisation options.  
 }
 \details{
 \tabular{ll}{
 Package: \tab rworldmap\cr
 Type: \tab Package\cr
-Version: \tab 1.02\cr
-Date: \tab 2012-10-5\cr
+Version: \tab 1.3-1\cr
+Date: \tab 2013-08-22\cr
 License: \tab GPL (>= 2)\cr
 }
 
-Version 1.01 October 2012 newly uses updated Natural Earth Data for country boundaries 
+
+Version 1.01 October 2012 newly used updated Natural Earth Data for country boundaries 
 e.g. \code{\link{countriesLow}}. Higher resolution boundaries are provided in a companion package rworldxtra.
-It also adds country synonym matching in \code{\link{joinCountryData2Map}}.
+It also added country synonym matching in \code{\link{joinCountryData2Map}}.
 
 Country Level Data can be joined to a map using  \code{\link{joinCountryData2Map}}, 
 then mapped using \code{\link{mapCountryData}}.
@@ -51,7 +52,10 @@ Stable version :
 http://cran.r-project.org/web/packages/rworldmap
 \cr 
 Development version :
-http://code.google.com/p/rworld
+https://r-forge.r-project.org/projects/rworldmap/
+
+Discussion group :
+http://groups.google.com/group/rworldmap
 
 }
 

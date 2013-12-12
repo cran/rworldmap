@@ -1,8 +1,54 @@
 rworldmap changelog
 
+22/8/13 (1.3-1) CRAN submission
+added links to Google discussion group : http://groups.google.com/group/rworldmap
+
+
+20/8/13 (1.02-6) temporary development version
+modernising DESCRIPTION & NAMESPACE
+
+
+30/6/13 (1.02-5) 
+Refactoring input data checking for vector mapping functions.
+
+
+25/3/13 (1.02-4) 
+Improving country to grid conversions
+*mapPies() fixed xlim ylim, thanks to Jean-Baka Domelevo Entfellner for spotting
+
+
+22/2/13 (1.02-3) 
+*barplotCountryData added cex argument to change text size
+*mapCountryData corrected bug introduced in 1.02-2
+*countrySynonyms added 13 synonyms found in IARC globocan data
+*getMap() changed ISO3 for Western Sahara in all maps from SAH to ESH
+
+
+1/11/12 (1.02-2) 
+*mapCountryData changed so that if you pass it a vector of breaks (e.g. catMethod=c(1:6)) it doesn't change the number of colours even if all the values don't occur in the data
+*isoToName for getting country names from iso codes
+French Guiana, correcting.
+
+
+30/10/12 (1.02-1) 
+*mapBubbles added xlim, ylim args
+French Guiana added to countries maps by taking the polygon out of France (thanks to Rob Salguero-Gomez & Gordon Holtgrieve for spotting)
+French Guiana added to countryRegions
+Added line width option (lwd) for country boundaries to mapCountryData, mapBubbles, mapPies, mapBars, mapGriddedData, mapByRegion, mapHalfDegreeGridToCountries
+Added line width option (lwdSymbols) for symbols in mapBubbles and mapBars
+*labelCountries() new function added to plot country names on a worldmap
+South Sudan ISO3 code changed to SSD from SDS in countries* data files
+*countrySynonyms.rda added 13 new country synonyms used in world bank data
+*mapGriddedData corrected bug with addBorders='coasts'
+*mapGriddedData changed default borders to 'coarse'
+* mapBubbles changes to default values to fit with Natural Earth Data
+* mapPies bugs corrected and now copes with sPDF
+
+
 05/10/2012 (1.02)
 *rwmGetISO3.r removed test code after function def. that stopped installation, thanks to Brian Ripley
 *countrySynonyms added extra synonyms
+
 
 01/10/2012 (1.01)
 Changed country polygon boundaries to data derived from Natural Earth

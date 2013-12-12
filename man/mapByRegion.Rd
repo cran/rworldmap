@@ -8,8 +8,16 @@ As well as sums, other functions can be used, like mean, median, min, max, etc.
 There are currently 8 choices of region and 4 choices of country code.
 }
 \usage{
-mapByRegion(inFile, nameDataColumn, joinCode,
-nameJoinColumn, regionType, FUN = 'mean', na.rm=TRUE, mapTitle = '', ...)
+mapByRegion(inFile
+           , nameDataColumn
+					 , joinCode
+					 , nameJoinColumn
+					 , regionType
+					 , FUN = 'mean'
+					 , na.rm=TRUE
+					 , mapTitle = ''
+					 , lwd = 0.5
+					 , ...)
 }
 \arguments{
   \item{inFile}{a data frame}
@@ -20,14 +28,16 @@ nameJoinColumn, regionType, FUN = 'mean', na.rm=TRUE, mapTitle = '', ...)
   \item{FUN}{A function to apply to each region}
   \item{na.rm}{Only used for certain values of FUN. See details section below.}
   \item{mapTitle}{a title to be printed above the map}
+  \item{lwd}{line width for country borders}   
   \item{\dots}{further arguments to be passed to \code{\link{mapCountryData}}}
 }
 \details{
-The function is very similar to country2Region. The first difference is that the output is a map, rather than statistics. The second is the behaviour of extra arguments.
+The function is very similar to country2Region. The first difference is that the output is a map, rather than statistics. 
+The second is the behaviour of extra arguments.
 In country2Region the extra arguments go to FUN, here they go to mapCountryData.
 
 The na.rm argument is used when FUN has one of the following values:
-"mean","min","max","median","range","var","sd","mad" or "IQR".
+"mean", "min", "max", "median", "range", "var", "sd", "mad" or "IQR".
 This reduces the problem of not being able to supply extra arguments to FUN.
 }
 \value{

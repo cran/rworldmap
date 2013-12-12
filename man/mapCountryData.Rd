@@ -2,7 +2,8 @@
 \alias{mapCountryData}
 \title{Map country-level data.}
 \description{
-  Draw a map of country-level data, allowing countries to be coloured, from an object created in joinCountryData2Map().
+  Draw a map of country-level data, allowing countries to be coloured, from an 
+	object created in \code{\link{joinCountryData2Map}}.
 }
 \usage{
 mapCountryData( 
@@ -22,6 +23,7 @@ mapCountryData(
               , missingCountryCol = NA
               , add =               FALSE
               , nameColumnToHatch = ""
+              , lwd =               0.5
               )   
 }
 \arguments{
@@ -31,12 +33,17 @@ mapCountryData(
   \item{xlim}{ map extents c(west,east), can be overidden by mapRegion }
   \item{ylim}{ map extents c(south,north), can be overidden by mapRegion }
   \item{mapRegion}{ a country name from getMap()[['NAME']] or 'world','africa','oceania','eurasia','uk' sets map extents, overrides xlim,ylim }
-  \item{catMethod}{ method for categorisation of data "pretty", "fixedWidth", "diverging", "logfixedWidth","quantiles","categorical", or a numeric vector defining breaks }
+  \item{catMethod}{ method for categorisation of data :
+    \enumerate{
+               \item{}"categorical" - each unique value is treated as a separate category
+               \item{}for numeric data : "pretty", "fixedWidth", "diverging", "logFixedWidth", "quantiles"
+               \item{}a numeric vector defining breaks e.g. c(0:5), note that a value of 2 goes into 1-2 not 2-3, uses cut(include.lowest=TRUE)
+               }}
   \item{colourPalette}{ string describing the colour palette to use, choice of:
     \enumerate{
                \item{}"palette" for the current palette 
                \item{}a vector of valid colours, e.g. =c('red','white','blue') or output from RColourBrewer 
-               \item{}one of "heat","diverging","white2Black","black2White","topo","rainbow","terrain","negpos8","negpos9"
+               \item{}one of "heat", "diverging", "white2Black", "black2White", "topo", "rainbow", "terrain", "negpos8", "negpos9"
                }}
   \item{addLegend}{ whether to add a legend or not }
   \item{borderCol}{ the colour for country borders  }
@@ -50,7 +57,7 @@ mapCountryData(
                           , highest values will be solid and lower values will
                           have a decreasing density of hatching
                           , new feature more documentation will be added soon}    
-  
+  \item{lwd}{line width for country borders}  
 }
 
 \section{Warning}{will generate unhelpful errors in data categorisation if inappropriate 
@@ -95,7 +102,8 @@ mapParams <- mapCountryData(nameColumnToPlot='GEO3major'
               , colourPalette=c('white','green','red','yellow','blue','black') 
               )
 #changing legendText
-mapParams$legendText <- c('antarctic','africa','oceania','americas','s.asia','eurasia')              
+mapParams$legendText <- c('antarctic','africa','oceania'
+                         ,'americas','s.asia','eurasia')              
 do.call( addMapLegendBoxes, c(mapParams,x='bottom',title="Region",horiz=TRUE))
 
 ##showing how rworldmap can be used with the classInt and RColorBrewer packages
