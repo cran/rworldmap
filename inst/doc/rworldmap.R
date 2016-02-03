@@ -1,13 +1,13 @@
 ### R code from vignette source 'rworldmap.rnw'
 
 ###################################################
-### code chunk number 1: rworldmap.rnw:69-70
+### code chunk number 1: rworldmap.rnw:70-71
 ###################################################
 library(rworldmap)
 
 
 ###################################################
-### code chunk number 2: rworldmap.rnw:81-82
+### code chunk number 2: rworldmap.rnw:82-83
 ###################################################
 options(width=70)
 
@@ -239,11 +239,11 @@ sPDF <- joinCountryData2Map( countryExData
                            )
 
 #getting class intervals using a 'jenks' classification in classInt package
-classInt <- classIntervals( sPDF[["EPI"]], n=5, style="jenks")
+classInt <- classInt::classIntervals( sPDF[["EPI"]], n=5, style="jenks")
 catMethod = classInt[["brks"]]
 
 #getting a colour scheme from the RColorBrewer package
-colourPalette <- brewer.pal(5,'RdPu')
+colourPalette <- RColorBrewer::brewer.pal(5,'RdPu')
 
 #calling mapCountryData with the parameters from classInt and RColorBrewer
 mapParams <- mapCountryData( sPDF

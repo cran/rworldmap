@@ -1,6 +1,63 @@
-# assumes that the total value is obtained by adding nameZs
-# could add an optional param nameZtotal that will only be used if it is specified
-# default for nameZs set to the names for cols 3 & 4 
+#' function to produce pie charts on a map
+#' 
+#' The function will produce a map with pie charts centred on country centroids
+#' (or other chosen points). The size of the circles is determined by the sum
+#' of the attribute columns and each section is coloured.
+#' 
+#' Beware of creating plots that are difficult for the reader to interpret.
+#' More than 3 or 4 categories may be too many.
+#' 
+#' @param dF data frame or SpatialPolygonsDataFrame
+#' @param nameX name of column containing the X variable (longitude), not
+#' needed if dF is a SpatialPolygonsDataFrame
+#' @param nameY name of column containing the Y variable (latitude), not needed
+#' if dF is a SpatialPolygonsDataFrame
+#' @param nameZs name of columns containing numeric variables to determine pie
+#' sections
+#' @param zColours colours to apply to the pie section for each attribute
+#' column
+#' @param ratio the ratio of Y to N in the output map, set to 1 as default
+#' @param addCatLegend whether to add a legend for categories
+# removed hasn't worked for a while
+# @param addSizeLegend whether to add a legend for symbol size
+#' @param symbolSize multiplier of default symbol size
+#' @param maxZVal the attribute value corresponding to the maximum symbol size,
+#' this can be used to set the scaling the same between multiple plots
+#' @param xlim map extents c(west,east), can be overidden by mapRegion
+#' @param ylim map extents c(south,north), can be overidden by mapRegion
+#' @param mapRegion a country name from getMap()[['NAME']] or
+#' 'world','africa','oceania','eurasia','uk' sets map extents, overrides
+#' xlim,ylim
+#' @param borderCol the colour for country borders
+#' @param oceanCol a colour for the ocean
+#' @param landCol a colour to fill countries
+#' @param add whether to add the symbols to an existing map, TRUE/FALSE
+#' @param main title for the map
+#' @param lwd line width for country borders
+#' @param \dots any extra arguments to points()
+#' @return currently doesn't return anything
+#' @author andy south
+#' @keywords aplot
+#' @examples
+#' 
+#' 
+#' #getting example data
+#' dF <- getMap()@@data  
+#' 
+#' ## these examples repeat the same column in 'nameZs' 
+#' ## to show that equal sized pies are created  
+#' 
+#' #mapPies( dF,nameX="LON", nameY="LAT",nameZs=c('AREA','AREA') )
+#' 
+#' #mapPies( dF,nameX="LON", nameY="LAT",nameZs=c('AREA','AREA')
+#' #       , mapRegion='africa' )
+#' 
+#' mapPies( dF,nameX="LON", nameY="LAT"
+#'        , nameZs=c('POP_EST','POP_EST','POP_EST','POP_EST'),mapRegion='africa' )
+#'   
+#' 
+#' 
+#' @export mapPies
 `mapPies` <- function( dF
                         ,nameX="LON", nameY="LAT" 
                         ,nameZs=c(names(dF)[3],names(dF)[4])
@@ -9,7 +66,7 @@
                         ,ratio = 1
                         #,we=0, ea=0, so=0, no=0
                         ,addCatLegend = TRUE
-                        ,addSizeLegend = TRUE
+                        #,addSizeLegend = TRUE
                         #,plotRectangles = FALSE
                         #,addTickLabels = FALSE
                         
@@ -35,9 +92,11 @@
     #as they will be plotted the same in pies & have a problem in seq with them ?
     #replace all nas in a df
     #31/5/12 removing
+    #201403 re-enabling but moving later
     #dF[is.na(dF)] <- 0
  
     #20/7/2010 changed option for region to be set from data
+    #201403 should be able to remove this same as mapBars
     if ( mapRegion == 'data' ) #( (we==0 && so==0) ) # || (we==NA && so==NA)) #caused error with some data not other
     {
       xlim <- c( min(dF[,nameX], na.rm=TRUE),max(dF[,nameX], na.rm=TRUE) )
@@ -89,7 +148,9 @@
       plot( getMap(), add=TRUE, border=borderCol, col=landCol, main=main, lwd=lwd )
     }        
     
-    
+ 
+    #201403 re-enabling but moving later to avoid entanglement with sPDF
+    dF[is.na(dF)] <- 0   
        
     maxSumValues <- 0
     #go through each circle to plot to find maximum value for scaling

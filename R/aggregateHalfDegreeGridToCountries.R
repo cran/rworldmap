@@ -1,3 +1,36 @@
+#' Aggregates global half degree gridded data to countries
+#' 
+#' Aggregates global half degree gridded data to countries (options for sum,
+#' mean, min, max ). Uses a very simple grid map defining a single country
+#' identity for each half degree cell.  (other more sophisticated approaches
+#' dividing cells between multiple countries will be investigated in future).
+#' The country identity at each cell is specified in
+#' data(gridCountriesDegreesHalf).
+#' 
+#' 
+#' @param inFile either a gridascii filename or an sp SpatialGridDataFrame
+#' object specifying a global half degree grid dataset
+#' @param aggregateOption how to aggregate the data ('sum','mean','min','max')
+#' @return a dataframe with 2 columns : numeric country codes and the
+#' aggregated value for each country
+#' @author andy south
+#' @importFrom maptools readAsciiGrid
+#' @seealso \code{\link{mapHalfDegreeGridToCountries}}
+#' @keywords dplot
+#' @examples
+#' 
+#' 
+#' data(gridExData,envir=environment(),package="rworldmap")
+#' gridExData <- get("gridExData")
+#' #aggregating the gridded data to countries
+#' dF <- aggregateHalfDegreeGridToCountries(gridExData)
+#' #joining the aggregated data to a country map
+#' sPDF <- joinCountryData2Map(dF, nameJoinColumn='UN', joinCode='UN')
+#' #plotting the map
+#' mapCountryData(sPDF,nameColumnToPlot='sum_pa2000.asc')
+#' 
+#' 
+#' @export aggregateHalfDegreeGridToCountries
 `aggregateHalfDegreeGridToCountries` <-
 function( inFile=""
                          ,aggregateOption="sum"  #"mean","max","min"
@@ -8,11 +41,6 @@ function( inFile=""
     #based upon a grid country file obtained from IIASA
     #returns a dataframe with numeric country code & aggregated values
     #can do sum, mean, max or min        
-    #require(maptools)
-    #can fail to load data without this
-    #require(sp)
-
-    #sGDF <- readAsciiGrid(fname=inFile) 
 
     #added an option to work on an existing loaded spatialGridDataFrame
 
@@ -29,8 +57,8 @@ function( inFile=""
     } else if ( class(inFile)=="SpatialGridDataFrame" ) 
     {
        #if its already a SpatialGridDataFrame just copy it
-       #!!!! 6/3/09 this allows for the potential for multiple attribute columns 
-       #!!!! which is not coped with below
+       #! 6/3/09 this allows for the potential for multiple attribute columns 
+       #! which is not coped with below
        sGDF <- inFile
     } else
     {
@@ -41,18 +69,10 @@ function( inFile=""
     if ( gridparameters(sGDF)$cellsize[1]!=0.5 )
         warning(inFile," seems not to be a half degree grid, in aggregateHalfDegreeGridToCountries()\n")
      
-    #prompting user for file to open
-    #if ( inFile == "" ) inFile <- tclvalue(tkgetOpenFile(title="choose a data file to plot"))
-
-
-    #getting data from within package
-    #data("gridCountriesNumeric",envir=environment(),package="rworldmap")
-    #sGDFcountries <- get("gridCountriesNumeric")
     
     #25/03/2013 replacing grid file with updated countries
     data(gridCountriesDegreesHalf,envir=environment(),package="rworldmap")
     sGDFcountries <- get("gridCountriesDegreesHalf")
-    #sGDFcountries <- gridCountriesDegreesHalf      
     
     #getting the names of the columns containing the data
     attrNameGrid <- names(sGDF)[1]
@@ -64,7 +84,6 @@ function( inFile=""
     #4 aggregate cell values by numeric country code
     #! later offer option for user to specify which
     dFbyCountry <- aggregate(dF$attribute
-                         #, by=list(ISO3166_numeric = dF$ISO3166_numeric)
                          , by=list(UN = dF$UN)
                          , FUN = aggregateOption
                          , na.rm=TRUE )
@@ -76,8 +95,7 @@ function( inFile=""
        names(dFbyCountry)[2] <- paste(aggregateOption,"_",basename(inFile), sep='')            
     } else #if inFile is a sGDF 
     {
-       #!!!6/3/09 this causes an error if the SGDF contained multiple attribute columns
-       #!!!
+       #!6/3/09 this causes an error if the SGDF contained multiple attribute columns
        names(dFbyCountry)[2] <- paste(aggregateOption,"_",names(inFile), sep='') 
     }
     

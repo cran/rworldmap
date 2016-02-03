@@ -1,11 +1,24 @@
-#
-
+#' A simple way to access maps stored in the package.
+#' 
+#' A simple way to access maps stored in the package.
+#' 
+#' 
+#' @param resolution options "coarse","low","less islands","li","high". For
+#' "high" you need to install the package rworldxtra
+#' @param projection DEPRECATED OCTOBER 2012 to reproject maps see spTransform
+#' in rgdal
+#' @return A SpatialPolygonsDataFrame object.
+#' @author Barry Rowlingson & Andy South
+#' @keywords misc
+#' @examples
+#' 
+#' plot(getMap())
+#' 
+#' @export getMap
 `getMap` <-
 
 function(resolution="coarse",projection=NA){
   
-  #23/5/12 3 new resolutions
-  #deprecated projection option
   
   resolutionOptions <- c("coarse","low","less islands","li","high") 
   
@@ -35,7 +48,7 @@ function(resolution="coarse",projection=NA){
     data("countriesCoarseLessIslands", envir = environment(),package = "rworldmap")
     mapWithData <- get("countriesCoarseLessIslands", envir = environment(), inherits=FALSE)   
     
-  }  else if (resolution == "high" && !require(rworldxtra, quietly=TRUE)) {
+  }  else if (resolution == "high" && !requireNamespace(package = "rworldxtra", quietly=TRUE)) {
     warning("for resolution='high' option you need to install package rworldxtra, using low resolution version for now")
     data("countriesLow", envir = environment(), package = "rworldmap")
     mapWithData <- get("countriesLow", envir = environment(), inherits=FALSE)
@@ -45,11 +58,6 @@ function(resolution="coarse",projection=NA){
     mapWithData <- get("countriesHigh", envir = environment(), inherits=FALSE)    
   }  
 
-  
-#  else if (projection == "EqualArea" || projection == "equalArea") {
-#    data("wrld_simpl_Mollweide", envir = environment(), package = "rworldmap")
-#    mapWithData <- get("wrld_simpl_Mollweide")
-#  }
  
   #trying eez map : does work - temporarily removed 31/8 to get permission
   #if (resolution == "eez") {

@@ -1,25 +1,73 @@
-#barplotCountryData1
-#andy south 16/11/09
-
-#to develop a function to plot country data as a series of barplots in columns or rows
-#one bar per country and to be able to read country names
-#ranking countries
-#to fit all countries on a single page
-#to be able to assess whether catMethod and numCats are sensible for the data
-
-#initial needs :
-#same inputs as rworldmap functions
-#ability apply same categorisation & colouration
-#option for scale to be the same between columns
-
-#later
-#vertical
-#offer portrait & landscape options with pre-defined settings
-#option whether to add rank
-#option for different ordering, e.g. by continent
-
-
-
+#' Barplot country-level data.
+#' 
+#' Draw a barplot of country-level data, ranking the countries to allow easy
+#' comparison. 
+#' One bar per country and to be able to read country names.
+#' This is useful for comparing with maps created by
+#' \code{\link{mapCountryData}} and accepts many of the same arguments for
+#' categorising and colouring.
+#' 
+#' 
+#' Finer control can be achieved by \code{\link{addMapLegend}}.
+#' 
+#' @param dF a dataframe containing at least one column with numeric data and
+#' one with country names or other labels
+#' @param nameColumnToPlot name of column containing the data you want to plot
+#' @param nameCountryColumn name of column containing country names (or other
+#' labels to be used in plot)
+#' @param numPanels the number of layout panels in the plot
+#' @param scaleSameInPanels whether to set the scale the same in each panel
+#' TRUE/FALSE, default=FALSE allowing more of the variability in the data to be
+#' viewed
+#' @param main title for the plot
+#' @param numCats number of categories to put the data in, may be modified if
+#' this number is incompatible with the catMethod chosen
+#' @param catMethod method for categorisation of data "pretty", "fixedWidth",
+#' "diverging", "logFixedWidth","quantiles","categorical", or a numeric vector
+#' defining breaks
+#' @param colourPalette a string describing the colour palette to use, choice
+#' of : \enumerate{ \item= "palette" for the current palette \item a vector of
+#' valid colours, e.g. =c('red','white','blue') or output from RColourBrewer
+#' \item = one of "heat", "diverging", "white2Black", "black2White", "topo",
+#' "rainbow", "terrain", "negpos8", "negpos9" }
+#' @param addLegend NOT YET WORKING whether to add a legend or not, TRUE/FALSE
+#' @param toPDF whether to output the plot to a pdf rather than the screen,
+#' TRUE/FALSE
+#' @param outFile output filename if toPDF=TRUE
+#' @param decreasing logical. Should the sort order be increasing or
+#' decreasing?
+#' @param na.last for controlling the treatment of NAs. If TRUE, missing values
+#' in the data are put last; if FALSE, they are put first; if NA, they are
+#' removed.
+#' @param cex sizing of labels, default = 0.7
+#' @param \dots other arguments to pass to barplot
+#' @return invisibly returns a list containing the data and main options used
+#' for the map, the list can be passed to \code{\link{addMapLegend}} or
+#' \code{\link{addMapLegendBoxes}} along with additional options to allow
+#' greater flexibility in legend creation.
+#' @section Warning: will generate unhelpful errors in data categorisation if
+#' inappropriate options are chosen, e.g. with catMethod:Quantiles if numCats
+#' too high so that unique breaks cannot be defined.
+#' @author andy south
+#' @seealso classInt, RColorBrewer
+#' @keywords aplot
+#' @examples
+#' 
+#' #default uses popn data in the default map
+#' barplotCountryData()
+#' 
+#' 
+#' data("countryExData",envir=environment(),package="rworldmap")
+#' 
+#' barplotCountryData( countryExData
+#'               , nameColumnToPlot="BIODIVERSITY" 
+#'               , nameCountryColumn = "Country"
+#'               )
+#'               
+#' 
+#'               
+#' 
+#' @export barplotCountryData
 barplotCountryData <- function( dF=""
                          , nameColumnToPlot = ""
                          , nameCountryColumn = "NAME"                          
@@ -164,6 +212,3 @@ par(op)
 
 } # end of barplotCountryData
 
-#testing
-#barplotCountryData()
-#barplotCountryData(toPDF=TRUE,outFile="C:\\rWorldMapNotes\\functionsInDevelopment\\barplotCountryData\\barplot1")

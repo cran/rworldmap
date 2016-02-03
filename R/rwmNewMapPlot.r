@@ -1,5 +1,21 @@
-`rwmNewMapPlot`<-
-function(mapToPlot=getMap(),
+#' Internal function to set up an existing device for plotting maps
+#' 
+#' Sets the region, aspect and ocean colour for a new map plot
+#' 
+#' Called by mapCountryData() and mapGriddedData()
+#' 
+#' @param mapToPlot the worldmap to be plotted
+#' @param oceanCol a colour for the ocean
+#' @param mapRegion a string specifying the map region, see setMapExtents()
+#' @param xlim map extents c(west,east), can be overidden by mapRegion
+#' @param ylim map extents c(south,north), can be overidden by mapRegion
+#' @param aspect aspect for the map, defaults to 1, if set to 'variable' uses
+#' same default as plot.Spatial in sp
+#' @return a dataframe containing xlim and ylim
+#' @author andy south
+#' @keywords misc
+#' @export rwmNewMapPlot
+rwmNewMapPlot <- function(mapToPlot=getMap(),
          oceanCol=NA,
          mapRegion="world",
          xlim=NA,                  
@@ -15,7 +31,7 @@ function(mapToPlot=getMap(),
     ylim <- c(dFwesn$so, dFwesn$no)
   }
 
-  #2/10/12 getting xlim & ylim from bbox of the map
+  #getting xlim & ylim from bbox of map if they haven't been specified
   if (length(xlim)<2) xlim <- bbox(mapToPlot)['x',]  
   if (length(ylim)<2) ylim <- bbox(mapToPlot)['y',]
   

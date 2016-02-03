@@ -1,5 +1,24 @@
-`setMapExtents` <-
-function(mapRegion='world')
+#' Internal function allowing map extents to be set from area names
+#' 
+#' Allows map extents to be set from country or area names (e.g. India, Africa
+#' )
+#' 
+#' Can be called by \code{\link{mapCountryData}} and
+#' \code{\link{mapGriddedData}}
+#' 
+#' @param mapRegion a country name from getMap()[['NAME']] or one of
+#' 'eurasia','africa','latin america','uk','oceania','asia'
+#' @return a dataframe containing we,ea,so,no values in degrees between -180 &
+#' +180
+#' @author andy south
+#' @keywords dplot
+#' @examples
+#' 
+#' mapCountryData( mapRegion='Africa' )
+#' mapCountryData( mapRegion='India' )
+#' 
+#' @export setMapExtents
+setMapExtents <- function(mapRegion='world')
    {  
     #sets map region from names passed to it
     #by returning a data frame containing wesn
@@ -22,9 +41,9 @@ function(mapRegion='world')
     if ( mapRegion == 'eurasia' | mapRegion == 'Eurasia' )#1
        {we=-20;   ea=110;   so=20;   no=70} else 
     if ( mapRegion == 'africa' | mapRegion == 'Africa' )#2
-       {we=-20;   ea=80;    so=-30;   no=30} else 
+       {we=-20;   ea=55;    so=-35;   no=38} else 
     if ( mapRegion == 'latin america' | mapRegion == 'Latin America' )#3
-       {we=-110;   ea=-40;    so=-70;   no=20} else 
+       {we=-118;   ea=-35;    so=-58;   no=30} else 
     if ( mapRegion == 'north america' | mapRegion == 'North America' )#3
        {we=-150;   ea=-70;    so=10;   no=85} else        
     if ( mapRegion == 'uk' | mapRegion == 'UK' )#4

@@ -1,3 +1,58 @@
+#' Joins user country referenced data to a map
+#' 
+#' Joins user data referenced by country codes or names to an internal map,
+#' ready for plotting using \code{\link{mapCountryData}}.  Reports join
+#' successes and failures.
+#' 
+#' Joins data referenced by country codes to an internally stored map to enable
+#' plotting.  The user specifies which country code their data are referenced
+#' by, and the name of the column in their data containing that referencing
+#' data. The user can choose from different map resolutions, using the function
+#' \code{\link{getMap}} to retrieve the map. The function reports on how many
+#' countries successfully join to the map. Data can then be plotted using
+#' \code{\link{mapCountryData}}. NEW to version 1.01 Oct 2012 : for
+#' joinCode='NAME' alternative country names are matched using
+#' \code{\link{countrySynonyms}}.
+#' 
+#' The projection argument has now been deprecated, you can project maps using
+#' package rgdal as shown below and in the FAQ. \cr library(rgdal) \cr #first
+#' get countries excluding Antarctica which crashes spTransform \cr sPDF <-
+#' getMap()[-which(getMap()$ADMIN=='Antarctica'),] \cr #transform to robin for
+#' the Robinson projection \cr sPDF <- spTransform(sPDF, CRS=CRS("+proj=robin
+#' +ellps=WGS84")) \cr mapCountryData( sPDF, nameColumnToPlot="REGION")
+#' 
+#' @param dF R data frame with at least one column for country reference and
+#' one column of data
+#' @param joinCode how countries are referenced options
+#' "ISO2","ISO3","FIPS","NAME", "UN" = numeric codes
+#' @param nameJoinColumn name of column containing country referencing
+#' @param nameCountryColumn optional name of column containing country names
+#' (used in reporting of success/failure)
+#' @param suggestForFailedCodes NOT YET ENABLED T/F whether you want system to
+#' suggest for failed codes
+#' @param projection DEPRECATED JUNE 2012
+#' @param mapResolution resolution of the borders in the internal map, only for
+#' projection='none' : options 'low', 'medium'
+#' @param verbose if set to FALSE it doesn't print progress messages to console
+#' @return An R 'SpatialPolygonsDataFrame' [package "sp"] object with the
+#' passed data joined to it
+#' @author andy south
+#' @seealso \code{\link{mapCountryData}}, \code{\link{getMap}}
+#' @keywords dplot
+#' @examples
+#' 
+#' data("countryExData",envir=environment(),package="rworldmap")
+#' 
+#' sPDF <- joinCountryData2Map(countryExData
+#'               , joinCode = "ISO3"
+#'               , nameJoinColumn = "ISO3V10"
+#'               )
+#' mapCountryData( sPDF
+#'               , nameColumnToPlot="BIODIVERSITY" 
+#'               )
+#' 
+#' 
+#' @export joinCountryData2Map
 `joinCountryData2Map` <-
 function( dF
         , joinCode = "ISO3" #options "ISO2","ISO3","FIPS","NAME","UN"
@@ -16,14 +71,8 @@ function( dF
 		   warning('the projection argument has been deprecated, returning Lat Lon, use spTransform from package rgdal as shown in help details or the FAQ')
     
     #test whether user joinCode is one of permitted
-    
-    #23/5/12 allow some extras
     #natural earth data has : "ISO_A2","ISO_A3","FIPS_10_","ADMIN","ISO_N3",  #*beware that "NAME" in nat earth has abbreviations that don't match  
-    #i think i should leave them stored as is
-    #as joinCode is the name of the column in the maps in rworldmap
-    #I could either copy the columns
-    #or just change joinCode here 
-    #try just changing to start
+    #here I allow Nat Earth codes or my original codes
     
     listJoinCodesNew <- c("ISO_A2","ISO_A3","FIPS_10_","ADMIN","ISO_N3" )
     listJoinCodesOld <- c("ISO2","ISO3","FIPS","NAME","UN" )
@@ -57,8 +106,6 @@ function( dF
            
     #copy the users nameJoinColumn to a new column named the same as the column in the map for the join code
     #e.g if user has ISO3166_3 it will be copied to ISO3
-    #dF[[joinCode]] <- dF[[nameJoinColumn]]
-    #22/5/12 changed to make changing to synonyms easier
     dF[[joinCode]] <- as.character(dF[[nameJoinColumn]])
     
     #this removes any trailing spaces from the user data which could be a problem
@@ -67,8 +114,7 @@ function( dF
     #[:space:] is a pre-defined character class that matches space characters in your locale. 
     #* says to repeat the match zero or more times and $ says to match the end of the string.
     
-    #23/5/12
-    #if using NAME I could convert to ISO3 first using synonyms and match based on that
+    #23/5/12 if using NAME I could convert to ISO3 first using synonyms and match based on that
     #and set nameCountryColumn to what the join column was
     #but does everything become a bit hidden then ?
     #not really keeps it fairly simple
@@ -133,12 +179,10 @@ function( dF
     matchPosnsInUserData <- match(as.character(mapWithData@data[[joinCode]])
                                 , as.character(dF[[joinCode]])) 
     
-    #23/5/12 decided no very useful printing this out
-    
     #these are the codes in lookup that aren't found in user data
     codesMissingFromUserData <- as.character( mapWithData@data[[joinCode]][is.na(matchPosnsInUserData)] )                            
     countriesMissingFromUserData <- as.character( mapWithData@data[["NAME"]][is.na(matchPosnsInUserData)] )
-    #  
+      
     numMissingCodes <- length(codesMissingFromUserData) 
     
     #printing info to console
@@ -152,13 +196,11 @@ function( dF
     #   } # 
 
 
-    ###############################################################
     #merging lookup table onto user data for those codes that match
     #dF2 <- cbind(dFlookupCodes[matchPosnsInLookup,],dF)    
     #the other way around to before, i.e. joining data onto map
     
     mapWithData@data <- cbind(mapWithData@data, dF[matchPosnsInUserData,])
-
 
     #test colouring map by region & subregion seems to show order has been retained
     #plot(mapWithData,col=mapWithData@data$REGION)

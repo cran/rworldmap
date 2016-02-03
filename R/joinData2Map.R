@@ -1,24 +1,84 @@
-#joinData2Map.r
-#andy south 29/7/2010
-
-#to create a flexible function for joining column data to polygons
-#it can have a companion function : mapPolys()
-#it should accept :
-## nameMap
-# either
-# 1 named internal options, e.g. countries, EEZs, highSeasAreas, china
-# 2 the filename of an esri polygons shapefile
-# 3 a spatialPolygonsDataFrame 
-## nameJoinColumnData
-## nameNameColumnData
-## nameJoinIDMap
-
-#(joinData2Map could then be called by joinCountryData2Map, specifying nameJoinIDMap=joinCode)
-
-#add new maps to the getMap() function
-
-`joinData2Map` <-
-function( dF = ""
+#' Joins user polygon attribute data to a map
+#' 
+#' Joins user polygon attribute data to a map of polygon boundaries.  The map
+#' can either be one stored in the package or provided by the user.  Returns a
+#' spatialPolygonsDataFrame ready for plotting using \code{\link{mapPolys}}.
+#' Reports join successes and failures.
+#' 
+#' Joins user polygon attribute data provided in a 'data frame' to a map of
+#' polygon boundaries.  The map can either be one stored in the package or
+#' provided by the user.  Returns a spatialPolygonsDataFrame ready for plotting
+#' using \code{\link{mapPolys}}.  Reports join successes and failures.
+#' 
+#' The user specifies the name of the column in their data containing polygon
+#' referencing.
+#' 
+#' The user can choose from different internal map resolutions.  Uses the
+#' function \code{\link{getMap}} to retrieve the map.
+#' 
+#' @param dF R data frame with at least one column of polygon IDs and one
+#' column of data
+#' @param nameMap the map to join the attribute data too
+#' @param nameJoinIDMap the name of the joinIDs in the map
+#' @param nameJoinColumnData name of column in the data containing country
+#' referencing
+#' @param nameNameColumnData optional name of column in the data containing
+#' polygon names (used in reporting of success/failure)
+#' @param suggestForFailedCodes NOT YET ENABLED T/F whether you want system to
+#' suggest for failed codes
+#' @param projection DEPRECATED JUNE 2012
+#' @param mapResolution resolution of the borders in the internal map: options
+#' 'coarse','low', 'less islands'
+#' @param verbose if set to FALSE progress messages to console are restricted
+#' @return An R 'SpatialPolygonsDataFrame' [package "sp"] object with the data
+#' joined to it
+#' @author andy south
+#' @seealso \code{\link{mapPolys}}, \code{\link{getMap}}
+#' @keywords dplot
+#' @examples
+#' 
+#' 
+#' ## this example uses downloaded files
+#' ## to run it download the files
+#' ## and remove the comment symbols '#' from all the lines starting with a single '#'
+#' 
+#' ## US states map downloaded from :
+#' ## http://www2.census.gov/cgi-bin/shapefiles2009/national-files
+#' 
+#' #inFile <- 'tl_2009_us_stateec.shp'
+#' #sPDF <- readShapePoly(inFile)
+#' 
+#' ##################
+#' ## use mapPolys to map the sPDF
+#' #mapPolys(sPDF,nameColumnToPlot = "ALANDEC")
+#' #mapPolys(sPDF,nameColumnToPlot = "AWATEREC",mapRegion='North America')
+#' 
+#' ##################
+#' ## join some other data to it
+#' ## education data downloaded from here as xls then saved as csv
+#' ## http://nces.ed.gov/ccd/drpcompstatelvl.asp
+#' 
+#' #dataFile <- 'SDR071A_xls.csv'
+#' #dF <- read.csv(dataFile,as.is=TRUE)
+#' #str(dF)
+#' ## STATENAME
+#' ## DRP912 Dropout Rate, Grades 9 through 12
+#' 
+#' ## joining the data to the map
+#' ## based upon state names (column NAMEEC in map, and STATENAME in the data)
+#' #sPDF2 <- joinData2Map(dF
+#' #        , nameMap = sPDF
+#' #        , nameJoinIDMap = "NAMEEC"
+#' #        , nameJoinColumnData = "STATENAME")
+#' 
+#' #################
+#' ## plot one of the attribute variables
+#' #mapDevice()# to set nice shape map window
+#' #mapPolys(sPDF2,nameColumnToPlot = "DRP912",mapRegion='North America')
+#' 
+#' 
+#' @export joinData2Map
+`joinData2Map` <- function( dF = ""
         , nameMap = ""
         , nameJoinIDMap = "ISO3"
         #, joinCode = "ISO3" #options "ISO2","ISO3","FIPS","NAME","UN"
