@@ -32,4 +32,3 @@ mapCountryData( mapRegion='India' )
 andy south
 }
 \keyword{dplot}
-

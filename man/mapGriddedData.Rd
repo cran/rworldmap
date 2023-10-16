@@ -4,11 +4,24 @@
 \alias{mapGriddedData}
 \title{Produce maps of global gridded data at half degree resolution}
 \usage{
-mapGriddedData(dataset = "", nameColumnToPlot = "", numCats = 5,
-  catMethod = "quantiles", colourPalette = "heat", xlim = c(-180, 180),
-  ylim = c(-80, 90), mapRegion = "world", addLegend = TRUE,
-  addBorders = "coarse", borderCol = "grey", oceanCol = NA,
-  landCol = NA, plotData = TRUE, aspect = 1, lwd = 1)
+mapGriddedData(
+  dataset = "",
+  nameColumnToPlot = "",
+  numCats = 5,
+  catMethod = "quantiles",
+  colourPalette = "heat",
+  xlim = c(-180, 180),
+  ylim = c(-80, 90),
+  mapRegion = "world",
+  addLegend = TRUE,
+  addBorders = "coarse",
+  borderCol = "grey",
+  oceanCol = NA,
+  landCol = NA,
+  plotData = TRUE,
+  aspect = 1,
+  lwd = 1
+)
 }
 \arguments{
 \item{dataset}{gridded data either as a : \enumerate{ \item
@@ -97,11 +110,11 @@ mapGriddedData( gridExData, nameColumnToPlot= 'categories'
 
 
 }
-\author{
-andy south
-}
 \seealso{
 classInt, RColorBrewer
 }
+\author{
+andy south
+#@importFrom maptools readAsciiGrid
+}
 \keyword{hplot}
-

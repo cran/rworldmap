@@ -5,8 +5,10 @@
 \alias{countriesLow}
 \title{a low resolution world map, a vector map of 244 country boundaries, suitable
 for zooming in on regions or large global maps}
-\format{The format is: Formal class 'SpatialPolygonsDataFrame' [package
-"sp"] with 5 slots}
+\format{
+The format is: Formal class 'SpatialPolygonsDataFrame' [package
+"sp"] with 5 slots
+}
 \source{
 http://www.naturalearthdata.com/downloads/50m-cultural-vectors/
 }
@@ -38,4 +40,3 @@ data(countriesLow)
 
 }
 \keyword{datasets}
-

@@ -4,10 +4,17 @@
 \alias{joinData2Map}
 \title{Joins user polygon attribute data to a map}
 \usage{
-joinData2Map(dF = "", nameMap = "", nameJoinIDMap = "ISO3",
-  nameJoinColumnData = "ISO3V10", nameNameColumnData = "Country",
-  suggestForFailedCodes = FALSE, projection = NA,
-  mapResolution = "coarse", verbose = FALSE)
+joinData2Map(
+  dF = "",
+  nameMap = "",
+  nameJoinIDMap = "ISO3",
+  nameJoinColumnData = "ISO3V10",
+  nameNameColumnData = "Country",
+  suggestForFailedCodes = FALSE,
+  projection = NA,
+  mapResolution = "coarse",
+  verbose = FALSE
+)
 }
 \arguments{
 \item{dF}{R data frame with at least one column of polygon IDs and one
@@ -98,11 +105,10 @@ function \code{\link{getMap}} to retrieve the map.
 
 
 }
-\author{
-andy south
-}
 \seealso{
 \code{\link{mapPolys}}, \code{\link{getMap}}
 }
+\author{
+andy south
+}
 \keyword{dplot}
-

@@ -1,7 +1,7 @@
 ### R code from vignette source 'rworldmapFAQ.Rnw'
 
 ###################################################
-### code chunk number 1: rworldmapFAQ.Rnw:25-26
+### code chunk number 1: rworldmapFAQ.Rnw:24-25
 ###################################################
 options(width=70)
 
@@ -13,7 +13,7 @@ par(mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
 
 
 ###################################################
-### code chunk number 3: rworldmapFAQ.Rnw:64-66
+### code chunk number 3: rworldmapFAQ.Rnw:63-65
 ###################################################
 require(rworldmap)
 library(rworldmap)
@@ -193,7 +193,7 @@ mtext("Source: Andy South, The R Journal Vol. 3/1, June 2011",side=1,line=-1)
 ###################################################
 par(mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
 
-library(rgdal)
+#library(rgdal)
 #first get countries excluding Antarctica which crashes spTransform
 sPDF <- getMap()[-which(getMap()$ADMIN=='Antarctica'),]
 #transform to robin for the Robinson projection

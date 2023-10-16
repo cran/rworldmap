@@ -4,12 +4,25 @@
 \alias{mapCountryData}
 \title{Map country-level data.}
 \usage{
-mapCountryData(mapToPlot = "", nameColumnToPlot = "", numCats = 7,
-  xlim = NA, ylim = NA, mapRegion = "world", catMethod = "quantiles",
-  colourPalette = "heat", addLegend = TRUE, borderCol = "grey",
-  mapTitle = "columnName", oceanCol = NA, aspect = 1,
-  missingCountryCol = NA, add = FALSE, nameColumnToHatch = "",
-  lwd = 0.5)
+mapCountryData(
+  mapToPlot = "",
+  nameColumnToPlot = "",
+  numCats = 7,
+  xlim = NA,
+  ylim = NA,
+  mapRegion = "world",
+  catMethod = "quantiles",
+  colourPalette = "heat",
+  addLegend = TRUE,
+  borderCol = "grey",
+  mapTitle = "columnName",
+  oceanCol = NA,
+  aspect = 1,
+  missingCountryCol = NA,
+  add = FALSE,
+  nameColumnToHatch = "",
+  lwd = 0.5
+)
 }
 \arguments{
 \item{mapToPlot}{a spatial polygons dataframe from joinCountryData2Map()
@@ -90,6 +103,7 @@ can be achieved by \code{\link{addMapLegendBoxes}} or
 inappropriate options are chosen, e.g. with catMethod:Quantiles if numCats
 too high so that unique breaks cannot be defined.
 }
+
 \examples{
 
 mapCountryData()
@@ -137,11 +151,10 @@ do.call(addMapLegend, c(mapParams
 
 
 }
-\author{
-andy south
-}
 \seealso{
 classInt, RColorBrewer
 }
+\author{
+andy south
+}
 \keyword{aplot}
-

@@ -36,7 +36,7 @@
 #' "rainbow", "terrain", "negpos8", "negpos9" }
 #' @param xlim map extents c(west,east), can be overidden by mapRegion
 #' @param ylim map extents c(south,north), can be overidden by mapRegion
-#' @param mapRegion a country name from getMap()\$NAME or
+#' @param mapRegion a country name from getMap()$NAME or
 #' 'world','africa','oceania','eurasia','uk' sets map extents, overrides
 #' xlim,ylim
 #' @param borderCol the colour for country borders
@@ -44,7 +44,7 @@
 #' @param landCol a colour to fill countries
 #' @param addLegend whether to add a legend for symbol sizes
 #' @param legendBg background colour for the legend, NA=transparent
-#' @param legendVals allows user to set values & hence symbol sizing in legend
+#' @param legendVals allows user to set values and hence symbol sizing in legend
 #' @param legendPos positioning of legend e.g. 'bottomleft', 'topright'
 #' @param legendHoriz whether to arrange legend elements horizontally
 #' TRUE/FALSE
@@ -135,7 +135,7 @@ mapBubbles <- function( dF=""
 functionName <- as.character(sys.call()[[1]])
 
 #use example data if no file specified
-if ( class(dF)=="character" && dF=="" )
+if ( inherits(dF, "character") && dF=="" )
    {
     message(paste("using example data because no file specified in",functionName))   
     dF=getMap()@data
@@ -146,7 +146,7 @@ if ( class(dF)=="character" && dF=="" )
    }
 
 #allows just a sPDF to be passed and it will get the label points, so doesn't need nameX & nameY to be specified
-if (class(dF)=="SpatialPolygonsDataFrame")
+if (inherits(dF, "SpatialPolygonsDataFrame"))
    {
     #10/10/12 moved plotting to after getting & setting centroids
   

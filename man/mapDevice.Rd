@@ -4,9 +4,20 @@
 \alias{mapDevice}
 \title{Creates a plot device set up for maps}
 \usage{
-mapDevice(device = "dev.new", rows = 1, columns = 1, plotOrder = "rows",
-  width = NULL, height = NULL, titleSpace = NULL, mai = c(0, 0, 0.2, 0),
-  mgp = c(0, 0, 0), xaxs = "i", yaxs = "i", ...)
+mapDevice(
+  device = "dev.new",
+  rows = 1,
+  columns = 1,
+  plotOrder = "rows",
+  width = NULL,
+  height = NULL,
+  titleSpace = NULL,
+  mai = c(0, 0, 0.2, 0),
+  mgp = c(0, 0, 0),
+  xaxs = "i",
+  yaxs = "i",
+  ...
+)
 }
 \arguments{
 \item{device}{Character string which controls the type of plot default.  The
@@ -72,4 +83,3 @@ dev.off()
 mapCountryData,mapGridAscii
 }
 \keyword{device}
-

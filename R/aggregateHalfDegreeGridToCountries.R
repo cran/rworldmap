@@ -14,7 +14,7 @@
 #' @return a dataframe with 2 columns : numeric country codes and the
 #' aggregated value for each country
 #' @author andy south
-#' @importFrom maptools readAsciiGrid
+#' #@importFrom maptools readAsciiGrid
 #' @seealso \code{\link{mapHalfDegreeGridToCountries}}
 #' @keywords dplot
 #' @examples
@@ -54,7 +54,7 @@ function( inFile=""
        #reading file into a SpatialGridDataFrame   
        sGDF <- readAsciiGrid(fname=inFile)
             
-    } else if ( class(inFile)=="SpatialGridDataFrame" ) 
+    } else if ( inherits(inFile, "SpatialGridDataFrame") ) 
     {
        #if its already a SpatialGridDataFrame just copy it
        #! 6/3/09 this allows for the potential for multiple attribute columns 

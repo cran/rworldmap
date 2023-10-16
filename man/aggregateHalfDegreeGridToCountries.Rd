@@ -38,11 +38,11 @@ mapCountryData(sPDF,nameColumnToPlot='sum_pa2000.asc')
 
 
 }
-\author{
-andy south
-}
 \seealso{
 \code{\link{mapHalfDegreeGridToCountries}}
 }
+\author{
+andy south
+#@importFrom maptools readAsciiGrid
+}
 \keyword{dplot}
-

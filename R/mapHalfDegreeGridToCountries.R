@@ -31,7 +31,7 @@
 #' for the map, the list can be passed to \code{\link{addMapLegend}} along with
 #' additional options to allow greater flexibility in legend creation.
 #' @author andy south
-#' @importFrom maptools readAsciiGrid
+#' #@importFrom maptools readAsciiGrid
 #' @seealso \code{\link{aggregateHalfDegreeGridToCountries}}
 #' @keywords aplot
 #' @examples
@@ -69,7 +69,7 @@
                        
     #map global half degree gridded data 
     #will work on a gridascii file or a SpatialGridDataFrame or use the example data if none specified
-    if ( class(inFile)=="SpatialGridDataFrame" ) 
+    if ( inherits(inFile, "SpatialGridDataFrame" ))
     {
        sGDF <- inFile           
     }

@@ -5,8 +5,10 @@
 \alias{countriesCoarse}
 \title{a coarse resolution world map, a vector map of 244 country
 boundaries,suitable for global maps}
-\format{The format is: Formal class 'SpatialPolygonsDataFrame' [package
-"sp"] with 5 slots}
+\format{
+The format is: Formal class 'SpatialPolygonsDataFrame' [package
+"sp"] with 5 slots
+}
 \source{
 http://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/
 }
@@ -42,4 +44,3 @@ data(countriesCoarse)
 
 }
 \keyword{datasets}
-

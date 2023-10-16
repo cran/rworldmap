@@ -4,11 +4,24 @@
 \alias{mapPolys}
 \title{Map polygon data.}
 \usage{
-mapPolys(mapToPlot = "", nameColumnToPlot = "", numCats = 7, xlim = NA,
-  ylim = NA, mapRegion = "world", catMethod = "quantiles",
-  colourPalette = "heat", addLegend = TRUE, borderCol = "grey",
-  mapTitle = "columnName", oceanCol = NA, aspect = 1,
-  missingCountryCol = NA, add = FALSE, lwd = 0.5)
+mapPolys(
+  mapToPlot = "",
+  nameColumnToPlot = "",
+  numCats = 7,
+  xlim = NA,
+  ylim = NA,
+  mapRegion = "world",
+  catMethod = "quantiles",
+  colourPalette = "heat",
+  addLegend = TRUE,
+  borderCol = "grey",
+  mapTitle = "columnName",
+  oceanCol = NA,
+  aspect = 1,
+  missingCountryCol = NA,
+  add = FALSE,
+  lwd = 0.5
+)
 }
 \arguments{
 \item{mapToPlot}{a spatial polygons dataframe (e.g. from joinData2Map())
@@ -131,11 +144,10 @@ can be achieved by \code{\link{addMapLegendBoxes}} or
 
 
 }
-\author{
-andy south
-}
 \seealso{
 joinData2Map, classInt, RColorBrewer
 }
+\author{
+andy south
+}
 \keyword{aplot}
-

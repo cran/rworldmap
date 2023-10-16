@@ -4,11 +4,27 @@
 \alias{mapPies}
 \title{function to produce pie charts on a map}
 \usage{
-mapPies(dF, nameX = "LON", nameY = "LAT", nameZs = c(names(dF)[3],
-  names(dF)[4]), zColours = c(1:length(nameZs)), ratio = 1,
-  addCatLegend = TRUE, symbolSize = 1, maxZVal = NA, xlim = NA,
-  ylim = NA, mapRegion = "world", borderCol = "grey", oceanCol = NA,
-  landCol = NA, add = FALSE, main = "", lwd = 0.5, ...)
+mapPies(
+  dF,
+  nameX = "LON",
+  nameY = "LAT",
+  nameZs = c(names(dF)[3], names(dF)[4]),
+  zColours = c(1:length(nameZs)),
+  ratio = 1,
+  addCatLegend = TRUE,
+  symbolSize = 1,
+  maxZVal = NA,
+  xlim = NA,
+  ylim = NA,
+  mapRegion = "world",
+  borderCol = "grey",
+  oceanCol = NA,
+  landCol = NA,
+  add = FALSE,
+  main = "",
+  lwd = 0.5,
+  ...
+)
 }
 \arguments{
 \item{dF}{data frame or SpatialPolygonsDataFrame}
@@ -92,4 +108,3 @@ mapPies( dF,nameX="LON", nameY="LAT"
 andy south
 }
 \keyword{aplot}
-

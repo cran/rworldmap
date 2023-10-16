@@ -4,9 +4,16 @@
 \alias{joinCountryData2Map}
 \title{Joins user country referenced data to a map}
 \usage{
-joinCountryData2Map(dF, joinCode = "ISO3", nameJoinColumn = "ISO3V10",
-  nameCountryColumn = "Country", suggestForFailedCodes = FALSE,
-  mapResolution = "coarse", projection = NA, verbose = FALSE)
+joinCountryData2Map(
+  dF,
+  joinCode = "ISO3",
+  nameJoinColumn = "ISO3V10",
+  nameCountryColumn = "Country",
+  suggestForFailedCodes = FALSE,
+  mapResolution = "coarse",
+  projection = NA,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{dF}{R data frame with at least one column for country reference and
@@ -71,11 +78,10 @@ mapCountryData( sPDF
 
 
 }
-\author{
-andy south
-}
 \seealso{
 \code{\link{mapCountryData}}, \code{\link{getMap}}
 }
+\author{
+andy south
+}
 \keyword{dplot}
-
